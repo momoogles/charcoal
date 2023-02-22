@@ -1,13 +1,14 @@
-import React from 'react'
-import styled, { CSSProp, DefaultTheme, ThemeProvider } from 'styled-components'
-import { CharcoalTheme } from '@charcoal-ui/theme'
-import { Material } from '@charcoal-ui/foundation'
-import { createTheme, ThemeProp, defineThemeVariables } from '.'
-import { disabledSelector } from '@charcoal-ui/utils'
+import styled, {
+  CSSProp,
+  DefaultTheme,
+  ThemeProvider,
+} from 'styled-components/macro'
 
-export default {
-  title: 'styled',
-}
+import React from 'react'
+import { CharcoalTheme, light } from '@charcoal-ui/theme'
+import { Material } from '@charcoal-ui/foundation'
+import { createTheme, ThemeProp, defineThemeVariables, TokenInjector } from '.'
+import { disabledSelector } from '@charcoal-ui/utils'
 
 declare module 'react' {
   interface Attributes {
@@ -35,54 +36,64 @@ declare module 'styled-components' {
   export interface DefaultTheme extends MyTheme {}
 }
 
+export default {
+  title: 'styled',
+  decorators: [
+    (Story: () => JSX.Element) => (
+      <ThemeProvider theme={myTheme(light)}>
+        <TokenInjector theme={{ ':root': myTheme(light) }} />
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
+}
+
 const theme = createTheme(styled)
 
 export const Example = () => (
-  <ThemeProvider theme={myTheme}>
-    <Container>
-      <Normal>Sample</Normal>
-      <LeftTopPadding>Left Top Padding</LeftTopPadding>
-      <NestedWrap>
-        <Nested>Nested</Nested>
-      </NestedWrap>
-      <Multiline>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem dolores,
-        recusandae quidem mollitia eum non vel architecto possimus repudiandae
-        quis molestias neque facilis rem dolorum voluptatem impedit nemo
-        praesentium voluptas.
-      </Multiline>
-      <MultilineOverflow>
-        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem dolores,
-        recusandae quidem mollitia eum non vel architecto possimus repudiandae
-        quis molestias neque facilis rem dolorum voluptatem impedit nemo
-        praesentium voluptas.
-      </MultilineOverflow>
-      <WithEffects>With effects</WithEffects>
-      <WithoutHalfLeading>Without half-leading</WithoutHalfLeading>
-      <WithoutHalfLeadingNoOptimization>
-        Without half-leading (No optimization)
-      </WithoutHalfLeadingNoOptimization>
-      <WithHalfLeading>With half-leading</WithHalfLeading>
-      <FixedSizeBox>Fixed size box</FixedSizeBox>
-      <InputContainer>
-        <Button>Button</Button>
-        <Button disabled>Disabled</Button>
-      </InputContainer>
-      <InputContainer>
-        <TextField value="text field" />
-        <TextField value="disabled" disabled />
-        <TextField value="invalid" assertive />
-      </InputContainer>
-      <BorderedBox>Border</BorderedBox>
-      <GradientBox>Gradient</GradientBox>
-      <WarningGradientBox>Gradient (Warning)</WarningGradientBox>
-      <TailwindLike />
-      <FixBox>
-        <FullBox>Full width</FullBox>
-      </FixBox>
-      <LocalTheme>This is actually text1 !</LocalTheme>
-    </Container>
-  </ThemeProvider>
+  <Container>
+    <Normal>Sample</Normal>
+    <LeftTopPadding>Left Top Padding</LeftTopPadding>
+    <NestedWrap>
+      <Nested>Nested</Nested>
+    </NestedWrap>
+    <Multiline>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem dolores,
+      recusandae quidem mollitia eum non vel architecto possimus repudiandae
+      quis molestias neque facilis rem dolorum voluptatem impedit nemo
+      praesentium voluptas.
+    </Multiline>
+    <MultilineOverflow>
+      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem dolores,
+      recusandae quidem mollitia eum non vel architecto possimus repudiandae
+      quis molestias neque facilis rem dolorum voluptatem impedit nemo
+      praesentium voluptas.
+    </MultilineOverflow>
+    <WithEffects>With effects</WithEffects>
+    <WithoutHalfLeading>Without half-leading</WithoutHalfLeading>
+    <WithoutHalfLeadingNoOptimization>
+      Without half-leading (No optimization)
+    </WithoutHalfLeadingNoOptimization>
+    <WithHalfLeading>With half-leading</WithHalfLeading>
+    <FixedSizeBox>Fixed size box</FixedSizeBox>
+    <InputContainer>
+      <Button>Button</Button>
+      <Button disabled>Disabled</Button>
+    </InputContainer>
+    <InputContainer>
+      <TextField value="text field" />
+      <TextField value="disabled" disabled />
+      <TextField value="invalid" assertive />
+    </InputContainer>
+    <BorderedBox>Border</BorderedBox>
+    <GradientBox>Gradient</GradientBox>
+    <WarningGradientBox>Gradient (Warning)</WarningGradientBox>
+    <TailwindLike />
+    <FixBox>
+      <FullBox>Full width</FullBox>
+    </FixBox>
+    <LocalTheme>This is actually text1 !</LocalTheme>
+  </Container>
 )
 
 export const TailwindLike = () => (
