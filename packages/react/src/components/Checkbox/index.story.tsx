@@ -1,5 +1,7 @@
+import { px } from '@charcoal-ui/utils'
 import { action } from '@storybook/addon-actions'
-import React from 'react'
+import React, { useState } from 'react'
+import { css } from 'styled-components/macro'
 import Checkbox from '.'
 import { Story } from '../../_lib/compat'
 
@@ -79,4 +81,29 @@ Unlabelled.args = {
   defaultChecked: false,
   disabled: false,
   readonly: false,
+}
+
+export const MassiveListForPerformanceMonitor = () => {
+  const [item, setItem] = useState<number | null>(null)
+  return (
+    <div
+      css={css`
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 120px);
+        gap: ${({ theme }) => px(theme.spacing[16])};
+        user-select: none;
+      `}
+    >
+      {Array.from({ length: 200 }, (_, i) => (
+        <Checkbox
+          key={i}
+          checked={item === i}
+          onChange={(v) => setItem(v ? i : null)}
+          disabled={item !== null && item !== i}
+        >
+          <span>item-{i}</span>
+        </Checkbox>
+      ))}
+    </div>
+  )
 }

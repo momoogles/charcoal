@@ -1,14 +1,15 @@
 import styled, {
+  css,
   CSSProp,
   DefaultTheme,
   ThemeProvider,
 } from 'styled-components/macro'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { CharcoalTheme, light } from '@charcoal-ui/theme'
 import { Material } from '@charcoal-ui/foundation'
 import { createTheme, ThemeProp, defineThemeVariables, TokenInjector } from '.'
-import { disabledSelector } from '@charcoal-ui/utils'
+import { disabledSelector, px } from '@charcoal-ui/utils'
 
 declare module 'react' {
   interface Attributes {
@@ -115,6 +116,72 @@ export const TailwindLike = () => (
     </div>
   </div>
 )
+
+export const PerformanceMonitor = () => {
+  return (
+    <div
+      css={css`
+        display: grid;
+        grid-template-columns: repeat(2, 440px);
+        gap: ${px(24)};
+      `}
+    >
+      <MassiveListForPerformanceMonitor withTheme />
+      <MassiveListForPerformanceMonitor />
+    </div>
+  )
+}
+
+const MassiveListForPerformanceMonitor = ({
+  withTheme = false,
+}: {
+  withTheme?: boolean
+}) => {
+  const [item, setItem] = useState<number | null>(null)
+  return (
+    <div
+      css={css`
+        display: grid;
+      `}
+    >
+      {Array.from({ length: 200 }, (_, i) => (
+        <label
+          key={i}
+          css={css`
+            content-visibility: auto;
+            display: grid;
+            grid-auto-flow: column;
+            place-content: center start;
+            ${withTheme
+              ? theme((o) => [
+                  o.height.px(40),
+                  o.bg.surface3.hover,
+                  o.padding.horizontal(24),
+                ])
+              : css`
+                  height: 40px;
+                  background-color: var(--charcoal-surface3);
+                  padding-right: 24px;
+                  padding-left: 24px;
+                  transition: 0.2s background-color;
+
+                  &:hover:not(${disabledSelector}) {
+                    background-color: var(--charcoal-surface3-hover);
+                  }
+                `}
+          `}
+        >
+          <input
+            type="checkbox"
+            onChange={(e) => setItem(e.currentTarget.checked ? i : null)}
+            disabled={item !== null && item !== i}
+          />
+          <span>item-{i}</span>
+        </label>
+      ))}
+    </div>
+  )
+}
 
 const Container = styled.div``
 
